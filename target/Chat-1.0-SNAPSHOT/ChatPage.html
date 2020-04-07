@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1> Chat Room </h1>
+<form method = "POST" name ="ajax" action = "">
+    <label for="Name">Name:</label>
+    <input type="text" id="name" name="name"><br><br>
+    <label for="msg">Message:</label>
+    <input type="text" id="msg" name="msg"><br><br>
+    <input type = "button" value = "Submit" id="SubmitButton">
+</form>
+
+
+<table id="table">
+</table>
+
+<div id="div1">
+</div>
+
+
+
+
+
+<script src=http://code.jquery.com/jquery-latest.min.js></script>
+<script>
+
+    function ajaxCallBack(responseTxt, statusTxt, xhr){
+        if (statusTxt == "success") {
+
+            $.ajax({url: 'ChatServlet',
+                //type: 'POST',
+                type: 'GET',
+                //  contentType: 'application/json',
+                //data: jsonData, //parameter data
+                dataType: 'json', //For received data type
+                success: function (data) {
+                    $("#table").empty();
+                    $(data).each(function(idx, obj){
+                        content = '<tr><td>' + obj.sender + ':'+'<br>'  + obj.text  + '</td></tr>';
+
+
+                        //  content = '<tr><td>' + 1 + ':'+'<br>' +'</td></tr>';
+                        //  content = '<tr><td>' + responseTxt.sender + ':'+'<br>'  + responseTxt.msgg  + '</td></tr>';
+                        $('#table').append(content);
+
+                    } );
+                }
+            });
+
+        }
+
+
+    }
+
+    $(document).ready(function () {
+        $("#SubmitButton").click(function () {
+            var name = $("#name").val();
+            var message = $("#msg").val();
+
+
+
+            $.post("ChatServlet",
+                {"sender": name, "text": message}
+                , ajaxCallBack);
+
+        });
+    });
+
+
+
+
+</script>
+</body>
+</html>

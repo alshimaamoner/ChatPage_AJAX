@@ -4,39 +4,15 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<html style="background-color: rosybrown">
 <head>
     <title>TODO supply a title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<h1> Chat Room </h1>
-<form method = "POST" name ="ajax" action = "">
-    <label for="Name">Name:</label>
-    <input type="text" id="name" name="name"><br><br>
-    <label for="msg">Message:</label>
-    <input type="text" id="msg" name="msg"><br><br>
-    <input type = "button" value = "Submit" id="SubmitButton">
-</form>
 
-
-<table id="table">
-</table>
-
-<div id="div1">
-</div>
-
-
-
-
-
-<script src=http://code.jquery.com/jquery-latest.min.js></script>
-<script>
-
-    function ajaxCallBack(responseTxt, statusTxt, xhr){
-        if (statusTxt == "success") {
-
+    <script src=http://code.jquery.com/jquery-latest.min.js></script>
+    <script>
+        function x(data) {
             $.ajax({url: 'ChatServlet',
                 type: 'GET',
                 dataType: 'json',
@@ -49,29 +25,67 @@ and open the template in the editor.
                     } );
                 }
             });
+        }
+        function ajaxCallBack(responseTxt, statusTxt, xhr){
+            if (statusTxt == "success") {
+
+                $.ajax({url: 'ChatServlet',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#table").empty();
+                        $(data).each(function(idx, obj){
+                            content = '<tr><td>' + obj.sender + ':'+'<br>'  + obj.text  + '</td></tr>';
+                            $('#table').append(content);
+
+                        } );
+                    }
+                });
+
+            }
+
 
         }
 
-
-    }
-
-    $(document).ready(function () {
-        $("#SubmitButton").click(function () {
-            var name = $("#name").val();
-            var message = $("#msg").val();
+        $(document).ready(function () {
+            $("#SubmitButton").click(function () {
+                var name = $("#name").val();
+                var message = $("#msg").val();
 
 
 
-            $.post("ChatServlet",
-                {"sender": name, "text": message}
-                , ajaxCallBack);
+                $.post("ChatServlet",
+                    {"sender": name, "text": message}
+                    , ajaxCallBack);
 
+            });
         });
-    });
 
 
 
 
-</script>
+    </script>
+</head>
+<body onload="setInterval('x()' ,5)">
+<center style="color: wheat"><h1> Chat  </h1></center>
+<form method = "POST" name ="ajax" action = "" >
+    <label for="Name" style="color: wheat">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+    <label for="msg" style="color: wheat">Message:</label>
+    <input type="text" id="msg" name="msg" required><br><br>
+    <input type = "button" value = "Submit" id="SubmitButton">
+</form>
+
+
+<table id="table" bgcolor="#fff" style="color: black" width="50%">
+</table>
+
+<div id="div1">
+</div>
+
+
+
+
+
 </body>
 </html>
